@@ -57,7 +57,7 @@ const createWorkout = async (req, res) => {
 // Delete a workout
 const deleteWorkout = async (req,res)=>{
   const {id} = req.params;
-  if(!moongose.Types.ObjectId.isValid(id)){
+  if(!mongoose.Types.ObjectId.isValid(id)){
     return res.status(404).json({error:"Couldnot find the id"})
   }
   const deleted = await Workout.findByIdAndDelete(id);
@@ -70,7 +70,22 @@ const deleteWorkout = async (req,res)=>{
 
 
 // Update a workout
+const updateWorkouts = async(req,res)=>{
+  const {id} = req.params;
+  if(!mongoose.Types.ObjectId.isValid(id)){
+    return res.status(404).json({error:"Couldnot find the id"})
+  }
+  const updated = await Workout.findByIdAndUpdate(id,
+    {...req.body},
+    { new: true }
+   )
+  if(!updated){
+    return res.status(404).json({error:"Something went wrong while updating the workout"})
+  }
+
+res.status(200).json(updated);
+}
 
 
 
-module.exports={createWorkout,getWorkouts,singleWorkout}
+module.exports={createWorkout,getWorkouts,singleWorkout,deleteWorkout,updateWorkouts}
