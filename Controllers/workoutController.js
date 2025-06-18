@@ -55,7 +55,17 @@ const createWorkout = async (req, res) => {
 
 
 // Delete a workout
-
+const deleteWorkout = async (req,res)=>{
+  const {id} = req.params;
+  if(!moongose.Types.ObjectId.isValid(id)){
+    return res.status(404).json({error:"Couldnot find the id"})
+  }
+  const deleted = await Workout.findByIdAndDelete(id);
+  if(!deleted){
+    return res.status(404).json({error:"Couldnot find the id"})
+  }
+  res.status(200).json(deleted);
+}
 
 
 
